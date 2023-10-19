@@ -52,10 +52,10 @@
                             <tr class="text-center">
                                 <th style="min-width:350px"></th>
                                 <th style="min-width:220px" class="text-danger">Last Purchase Prices</th>
-                                <th style="min-width:150px" class="text-success">This Invoice Purchase Price Packet</th>
-                                <th style="min-width:150px" class="text-info">This Invoice Purchase Price unit</th>
-                                <th style="min-width: 180px" class="text-primary">Bonuses</th>
-                                <th style="min-width:70px"></th>
+                                <th style="min-width:180px" class="text-success">This Invoice Purchase Price Packet</th>
+                                <th style="min-width:190px" class="text-info">This Invoice Purchase Price unit</th>
+                                <th style="min-width: 300px" class="text-primary">Bonuses</th>
+                                <th style="min-width:120px"></th>
                                 <th style="min-width: 190px" class="text-warning">Last Sale Prices</th>
                                 <th style="min-width:70px"></th>
                                 <th style="min-width:210px" class="text-secondary">New Sale Prices</th>
@@ -71,13 +71,13 @@
                                 <th style="min-width:100px;font-size:10px" class="text-danger">Packet</th>
                                 <th style="min-width:100px;;font-size:10px" class="text-danger">Unit</th>
                                 <th style="font-size:10px" class="text-success">Quantity</th>
-                                <th style="font-size:10px" class="text-success">Price</th>
+                                <th style="min-width:100px; font-size:10px" class="text-success">Price</th>
                                 <th style="font-size:10px" class="text-info">Quantity</th>
-                                <th style="font-size:10px" class="text-info">Price</th>
-                                <th style="font-size:10px" class="text-primary">Packet</th>
-                                <th style="font-size:10px" class="text-primary">Unit</th>
-                                <th style="font-size:10px" class="text-primary">Disc %</th>
-                                <th style="font-size:10px">Amount</th>
+                                <th style="min-width:100px; font-size:10px" class="text-info">Price</th>
+                                <th style="min-width:100px; font-size:10px" class="text-primary">Packet</th>
+                                <th style="min-width:100px; font-size:10px" class="text-primary">Unit</th>
+                                <th style="min-width:100px; font-size:10px" class="text-primary">Disc %</th>
+                                <th style="min-width:130px;font-size:10px">Amount</th>
                                 <th style="min-width:100px;font-size:10px" class="text-warning">Packet</th>
                                 <th style="min-width:100px;font-size:10px" class="text-warning">Unit</th>
                                 <th style="font-size:10px">Margin%</th>
@@ -91,31 +91,46 @@
                                 <td>1</td>
                                 <td>
                                     <div class="form-group">
-                                        {{-- <input type="text" name="product_search[]" class="form-control product-search" placeholder="Search for a product" autocomplete="off"> --}}
-                                        {{-- <div class="search-results position-absolute bg-white  px-3 py-3 shadow" style="z-index: 99"></div> --}}
                                         <select class="product-search product-dropdown form-control form-control-sm select2" name="product_id[]">
                                             <!-- Options will be dynamically added here -->
                                         </select>
                                         
 
                                     </div>
-                                </td>                                
+                                </td>                     
+                                                                             {{-- PACK SIZE            --}}
                                 <td><input type="text" name="pack_size[]" class="form-control form-control-sm" disabled></td>
+                                                                             {{-- LAST PURCHASE PRICE PACKET            --}}
                                 <td><input type="text" name="last_purchase_price_pack[]" class="form-control form-control-sm" disabled></td>
+                                                                             {{-- LAST PURCHASE PRICE UNIT            --}}
                                 <td><input type="text" name="last_purchase_price_unit[]" class="form-control form-control-sm" disabled></td>
-                                <td><input type="text" name="pack_quantity[]" class="form-control form-control-sm"></td>
-                                <td><input type="text" name="pack_purchase_price[]" class="form-control form-control-sm"></td>
-                                <td><input type="text" name="unit_quantity[]" class="form-control form-control-sm"></td>
-                                <td><input type="text" name="unit_purchase_price[]" class="form-control form-control-sm"></td>
+                                                                             {{-- THIS INVOICE PURCHASE PRICE PACKET QUANTITY            --}}
+                                <td><input type="text" name="pack_quantity[]" class="form-control form-control-sm" oninput="calculateUnitQuantity(this)"></td>
+                                                                             {{-- THIS INVOICE PURCHASE PRICE PACKET PRICE            --}}
+                                <td><input type="text" name="pack_purchase_price[]" class="form-control form-control-sm" oninput="calculateUnitPurchasePrice(this)"></td>
+                                                                             {{-- THIS INVOICE PURCHASE PRICE UNIT QUANITY            --}}
+                                <td><input type="text" name="unit_quantity[]" class="form-control form-control-sm" oninput="calculatePackQuantity(this)" oninput="calculatePackPurchasePrice(this)"></td>
+                                                                             {{-- THIS INVOICE PURCHASE PRICE UNIT PRICE            --}}
+                                <td><input type="text" name="unit_purchase_price[]" class="form-control form-control-sm" oninput="calculatePackPurchasePrice(this)"></td>
+                                                                             {{-- BONUS PACKET            --}}
                                 <td><input type="text" name="bonus_pack[]" class="form-control form-control-sm"></td>
+                                                                             {{-- BONUS UNIT            --}}
                                 <td><input type="text" name="bonus_unit[]" class="form-control form-control-sm"></td>
+                                                                             {{-- BONUS %            --}}
                                 <td><input type="text" name="percent_bonus[]" class="form-control form-control-sm"></td>
+                                                                             {{-- TOTAL AMOUNT            --}}
                                 <td><input type="text" name="amount[]" class="form-control form-control-sm"></td>
+                                                                             {{-- LAST SALE PRICES PACKET            --}}
                                 <td><input type="text" name="last_sale_price_pack[]" class="form-control form-control-sm" disabled></td>
+                                                                             {{-- LAST SALE PRICE UNIT            --}}
                                 <td><input type="text" name="last_sale_price_unit[]" class="form-control form-control-sm" disabled></td>
+                                                                             {{-- MARGIN            --}}
                                 <td><input type="text" name="margin[]" class="form-control form-control-sm"></td>
+                                                                             {{-- NEW SALE PRICE PACKET            --}}
                                 <td><input type="text" name="new_sale_price_packet[]" class="form-control form-control-sm"></td>
+                                                                             {{-- NEW SALE PRICE UNIT            --}}
                                 <td><input type="text" name="new_sale_price_unit[]" class="form-control form-control-sm"></td>
+                
                                 <td><button type="button" class="si si-plus btn btn-success" onclick="addProductRow()"></button></td>
                             </tr>
                         </tbody>
@@ -202,85 +217,8 @@
         productCount--;
     }
 </script>
-// Search Result Working 19-oct-2023
-{{-- <script>
+<script>
     $(document).ready(function () {
-        // Handle input in the product search field
-        $(document).on('input', '.product-search', function () {
-            const query = $(this).val();
-            const resultsContainer = $(this).siblings('.search-results');
-
-            // Make an AJAX request to the search route
-            $.ajax({
-                url: '{{ route('products.search') }}',
-                method: 'GET',
-                data: {
-                    query: query,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (data) {
-                    // Clear previous results
-                    resultsContainer.empty();
-
-                    // Populate results container with new results
-                    data.forEach(function (product) {
-                        const resultItem = $('<div class="result-item">'+
-                         '<table class="table table-bordered table-striped table-vcente">' + 
-                            '<thead>' +
-                                '<tr>' +
-                                    '<th> Product Name </th>' +
-                                    '<th> Pack Size </th>' +
-                                    '<th> Current Quantity </th>' +
-                                    '<th> Unit Purchase </th>' +
-                                    '<th> Unit Sale </th>' +
-                                '<tr>'+
-                            '</thead>'+
-                            '<tbody>'+
-                                '<tr>'+
-                                '<td>' + product.name + '</td>'+
-                                '<td>' + product.pack_size + '</td>'+
-                                '<td>' + product.current_quantity + '</td>'+
-                                '<td>' + product.single_purchase_price + '</td>'+
-                                '<td>' + product.single_sale_price + '</td>'+
-                                '</tr>'+
-                            '</tbody>'+
-                          '</table>' + '</div>');
-
-                        // Handle click on the result item
-                        resultItem.on('click', function () {
-                            // Set the selected product in the input field
-                            const selectedInput = $(this).closest('.form-group').find('.product-search');
-                            selectedInput.val(product.name);
-
-                            // Fetch additional details for the selected product
-                            $.ajax({
-                                url: `{{ route('products.show', ['product' => '__productId__']) }}`.replace('__productId__', product.id),
-                                method: 'GET',
-                                success: function (productDetails) {
-                                    // Populate other fields based on the product details
-                                    selectedInput.closest('tr').find('[name="pack_size[]"]').val(productDetails.pack_size);
-                                    selectedInput.closest('tr').find('[name="last_purchase_price_pack[]"]').val(productDetails.pack_purchase_price);
-                                    selectedInput.closest('tr').find('[name="last_purchase_price_unit[]"]').val(productDetails.single_purchase_price);
-                                    selectedInput.closest('tr').find('[name="last_sale_price_pack[]"]').val(productDetails.pack_sale_price);
-                                    selectedInput.closest('tr').find('[name="last_sale_price_unit[]"]').val(productDetails.single_sale_price);
-                                    // Populate other fields as needed
-                                }
-                            });
-
-                            // Clear the results container
-                            resultsContainer.empty();
-                        });
-
-                        resultsContainer.append(resultItem);
-                    });
-                }
-            });
-        });
-    });
-</script>
- --}}
- <script>
-$(document).ready(function () {
     $('.product-search').select2({
         ajax: {
             url: '{{ route('products.search') }}',
@@ -331,7 +269,49 @@ $(document).ready(function () {
 
  </script>
 
+// Calculate Pack Quntity and Unit Quantity
+<script>
+    function calculateUnitQuantity(input) {
+    const row = input.closest('tr');
+    const packQuantity = parseFloat(input.value) || 0;
+    const packSize = parseFloat(row.querySelector('[name="pack_size[]"]').value) || 1;
+    const unitQuantityInput = row.querySelector('[name="unit_quantity[]"]');
+    const unitQuantity = packQuantity * packSize;
+    unitQuantityInput.value = isNaN(unitQuantity) ? '' : unitQuantity;
+}
+
+function calculatePackQuantity(input) {
+    const row = input.closest('tr');
+    const unitQuantity = parseFloat(input.value) || 0;
+    const packSize = parseFloat(row.querySelector('[name="pack_size[]"]').value) || 1;
+    const packQuantityInput = row.querySelector('[name="pack_quantity[]"]');
+    const packQuantity = unitQuantity / packSize;
+    packQuantityInput.value = isNaN(packQuantity) ? '' : packQuantity;
+}
+</script>
+
+// calculate Pack Purchase Price and Unit Purchase Price
+<script>
+    function calculateUnitPurchasePrice(input) {
+    const row = input.closest('tr');
+    const packPurchasePrice = parseFloat(input.value) || 0;
+    const unitQuantity = parseFloat(row.querySelector('[name="unit_quantity[]"]').value) || 1;
+    const unitPurchasePriceInput = row.querySelector('[name="unit_purchase_price[]"]');
+    const unitPurchasePrice = packPurchasePrice / unitQuantity;
+    unitPurchasePriceInput.value = isNaN(unitPurchasePrice) ? '' : unitPurchasePrice.toFixed(2);
+
+    calculateAmount(row);
+}
 
 
+function calculatePackPurchasePrice(input) {
+    const row = input.closest('tr');
+    const unitPurchasePrice = parseFloat(row.querySelector('[name="unit_purchase_price[]"]').value) || 0;
+    const unitQuantity = parseFloat(row.querySelector('[name="unit_quantity[]"]').value) || 1;
+    const packPurchasePriceInput = row.querySelector('[name="pack_purchase_price[]"]');
+    const packPurchasePrice = unitPurchasePrice * unitQuantity;
+    packPurchasePriceInput.value = isNaN(packPurchasePrice) ? '' : packPurchasePrice.toFixed(2);
+}
 
+</script>
 
