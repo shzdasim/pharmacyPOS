@@ -91,10 +91,10 @@
                                 <td>1</td>
                                 <td>
                                     <div class="form-group">
-                                        <select class="product-search product-dropdown form-control form-control-sm select2" name="product_id[]">
+                                        <select class="product-search product-dropdown form-control form-control-sm select2" name="product_id[]" onchange="handleProductChange(this)">
                                             <!-- Options will be dynamically added here -->
                                         </select>
-                                        
+
 
                                     </div>
                                 </td>                     
@@ -107,9 +107,9 @@
                                                                              {{-- THIS INVOICE PURCHASE PRICE PACKET QUANTITY            --}}
                                 <td><input type="text" name="pack_quantity[]" class="form-control form-control-sm" oninput="calculateUnitQuantity(this)"></td>
                                                                              {{-- THIS INVOICE PURCHASE PRICE PACKET PRICE            --}}
-                                <td><input type="text" name="pack_purchase_price[]" class="form-control form-control-sm" oninput="calculateUnitPurchasePrice(this)"></td>
+                                <td><input type="text" name="pack_purchase_price[]" class="form-control form-control-sm" oninput="calculateUnitPurchasePrice(this); calculateAmount(this)"></td>
                                                                              {{-- THIS INVOICE PURCHASE PRICE UNIT QUANITY            --}}
-                                <td><input type="text" name="unit_quantity[]" class="form-control form-control-sm" oninput="calculatePackQuantity(this)" oninput="calculatePackPurchasePrice(this)"></td>
+                                <td><input type="text" name="unit_quantity[]" class="form-control form-control-sm" oninput="calculatePackQuantity(this); calculatePackPurchasePrice(this)"></td>
                                                                              {{-- THIS INVOICE PURCHASE PRICE UNIT PRICE            --}}
                                 <td><input type="text" name="unit_purchase_price[]" class="form-control form-control-sm" oninput="calculatePackPurchasePrice(this)"></td>
                                                                              {{-- BONUS PACKET            --}}
@@ -119,7 +119,7 @@
                                                                              {{-- BONUS %            --}}
                                 <td><input type="text" name="percent_bonus[]" class="form-control form-control-sm"></td>
                                                                              {{-- TOTAL AMOUNT            --}}
-                                <td><input type="text" name="amount[]" class="form-control form-control-sm"></td>
+                                <td><input type="text" name="amount[]" class="form-control form-control-sm" disabled></td>
                                                                              {{-- LAST SALE PRICES PACKET            --}}
                                 <td><input type="text" name="last_sale_price_pack[]" class="form-control form-control-sm" disabled></td>
                                                                              {{-- LAST SALE PRICE UNIT            --}}
@@ -268,49 +268,95 @@
 });
 
  </script>
+// reset row
+<script>
+    function resetRow(row) {
+        row.querySelector('[name="pack_size[]"]').value = '';
+        row.querySelector('[name="last_purchase_price_pack[]"]').value = '';
+        row.querySelector('[name="last_purchase_price_unit[]"]').value = '';
+        row.querySelector('[name="pack_quantity[]"]').value = '';
+        row.querySelector('[name="pack_purchase_price[]"]').value = '';
+        row.querySelector('[name="unit_quantity[]"]').value = '';
+        row.querySelector('[name="unit_purchase_price[]"]').value = '';
+        row.querySelector('[name="bonus_pack[]"]').value = '';
+        row.querySelector('[name="bonus_unit[]"]').value = '';
+        row.querySelector('[name="percent_bonus[]"]').value = '';
+        row.querySelector('[name="amount[]"]').value = '';
+        row.querySelector('[name="last_sale_price_pack[]"]').value = '';
+        row.querySelector('[name="last_sale_price_unit[]"]').value = '';
+        row.querySelector('[name="margin[]"]').value = '';
+        row.querySelector('[name="new_sale_price_packet[]"]').value = '';
+        row.querySelector('[name="new_sale_price_unit[]"]').value = '';
+        // ... (reset other fields as needed)
+    }
+    function handleProductChange(select) {
+        const row = select.closest('tr');
+        // Reset the row only when a new product is selected
+        if (select.value !== row.getAttribute('data-selected-product')) {
+            resetRow(row);
+            row.setAttribute('data-selected-product', select.value);
+        }
+        // ... (other logic for handling product change)
+    }
+</script>
 
 // Calculate Pack Quntity and Unit Quantity
 <script>
-    function calculateUnitQuantity(input) {
-    const row = input.closest('tr');
-    const packQuantity = parseFloat(input.value) || 0;
-    const packSize = parseFloat(row.querySelector('[name="pack_size[]"]').value) || 1;
-    const unitQuantityInput = row.querySelector('[name="unit_quantity[]"]');
-    const unitQuantity = packQuantity * packSize;
-    unitQuantityInput.value = isNaN(unitQuantity) ? '' : unitQuantity;
-}
+        function calculateUnitQuantity(input) {
+        const row = input.closest('tr');
+        const packQuantity = parseFloat(input.value) || 0;
+        const packSize = parseFloat(row.querySelector('[name="pack_size[]"]').value) || 1;
+        const unitQuantityInput = row.querySelector('[name="unit_quantity[]"]');
+        const unitQuantity = packQuantity * packSize;
+        unitQuantityInput.value = isNaN(unitQuantity) ? '' : unitQuantity;
+        
+    }
 
-function calculatePackQuantity(input) {
-    const row = input.closest('tr');
-    const unitQuantity = parseFloat(input.value) || 0;
-    const packSize = parseFloat(row.querySelector('[name="pack_size[]"]').value) || 1;
-    const packQuantityInput = row.querySelector('[name="pack_quantity[]"]');
-    const packQuantity = unitQuantity / packSize;
-    packQuantityInput.value = isNaN(packQuantity) ? '' : packQuantity;
-}
+    function calculatePackQuantity(input) {
+        const row = input.closest('tr');
+        const unitQuantity = parseFloat(input.value) || 0;
+        const packSize = parseFloat(row.querySelector('[name="pack_size[]"]').value) || 1;
+        const packQuantityInput = row.querySelector('[name="pack_quantity[]"]');
+        const packQuantity = unitQuantity / packSize;
+        packQuantityInput.value = isNaN(packQuantity) ? '' : packQuantity;
+       
+    }
 </script>
 
 // calculate Pack Purchase Price and Unit Purchase Price
 <script>
-    function calculateUnitPurchasePrice(input) {
+     function calculateUnitPurchasePrice(input) {
     const row = input.closest('tr');
     const packPurchasePrice = parseFloat(input.value) || 0;
+    const packQuantity = parseFloat(row.querySelector('[name="pack_quantity[]"]').value) || 1;
     const unitQuantity = parseFloat(row.querySelector('[name="unit_quantity[]"]').value) || 1;
     const unitPurchasePriceInput = row.querySelector('[name="unit_purchase_price[]"]');
-    const unitPurchasePrice = packPurchasePrice / unitQuantity;
+    const unitPurchasePrice = packPurchasePrice * packQuantity/ unitQuantity;
     unitPurchasePriceInput.value = isNaN(unitPurchasePrice) ? '' : unitPurchasePrice.toFixed(2);
 
-    calculateAmount(row);
 }
+    function calculatePackPurchasePrice(input) {
+        const row = input.closest('tr');
+        const unitPurchasePrice = parseFloat(row.querySelector('[name="unit_purchase_price[]"]').value) || 0;
+        const unitQuantity = parseFloat(row.querySelector('[name="unit_quantity[]"]').value) || 1;
+        const packPurchasePriceInput = row.querySelector('[name="pack_purchase_price[]"]');
+        const packPurchasePrice = unitPurchasePrice * unitQuantity;
+        packPurchasePriceInput.value = isNaN(packPurchasePrice) ? '' : packPurchasePrice.toFixed(2);
+        
+    }
 
+</script>
 
-function calculatePackPurchasePrice(input) {
+// Calculate Amount
+<script>
+    function calculateAmount(input) {
     const row = input.closest('tr');
-    const unitPurchasePrice = parseFloat(row.querySelector('[name="unit_purchase_price[]"]').value) || 0;
-    const unitQuantity = parseFloat(row.querySelector('[name="unit_quantity[]"]').value) || 1;
-    const packPurchasePriceInput = row.querySelector('[name="pack_purchase_price[]"]');
-    const packPurchasePrice = unitPurchasePrice * unitQuantity;
-    packPurchasePriceInput.value = isNaN(packPurchasePrice) ? '' : packPurchasePrice.toFixed(2);
+    const packQuantity = parseFloat(row.querySelector('[name="pack_quantity[]"]').value) || 0;
+    const packPurchasePrice = parseFloat(row.querySelector('[name="pack_purchase_price[]"]').value) || 0;
+    const amountInput = row.querySelector('[name="amount[]"]');
+    const amount = packQuantity * packPurchasePrice;
+    amountInput.value = isNaN(amount) ? '' : amount.toFixed(2);
+   
 }
 
 </script>
