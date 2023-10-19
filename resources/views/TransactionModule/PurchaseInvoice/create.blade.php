@@ -127,9 +127,9 @@
                                                                              {{-- MARGIN            --}}
                                 <td><input type="text" name="margin[]" class="form-control form-control-sm"></td>
                                                                              {{-- NEW SALE PRICE PACKET            --}}
-                                <td><input type="text" name="new_sale_price_packet[]" class="form-control form-control-sm"></td>
+                                <td><input type="text" name="new_sale_price_packet[]" class="form-control form-control-sm" oninput="calculateNewSalePriceUnit(this)"></td>
                                                                              {{-- NEW SALE PRICE UNIT            --}}
-                                <td><input type="text" name="new_sale_price_unit[]" class="form-control form-control-sm"></td>
+                                <td><input type="text" name="new_sale_price_unit[]" class="form-control form-control-sm" oninput="calculateNewSalePricePacket(this)"></td>
                 
                                 <td><button type="button" class="si si-plus btn btn-success" onclick="addProductRow()"></button></td>
                             </tr>
@@ -360,4 +360,29 @@
 }
 
 </script>
+
+// Calculate New Sale Price Packet and New Sale Price Unit
+<script>
+    function calculateNewSalePricePacket(input) {
+        const row = input.closest('tr');
+        const packPurchasePrice = parseFloat(row.querySelector('[name="pack_purchase_price[]"]').value) || 0;
+        const newSalePricePacketInput = row.querySelector('[name="new_sale_price_packet[]"]');
+        const newSalePricePacket = packPurchasePrice;
+        newSalePricePacketInput.value = isNaN(newSalePricePacket) ? '' : newSalePricePacket.toFixed(2);
+        
+        // After calculating new sale price packet, also trigger the calculation of new sale price unit
+        calculateNewSalePriceUnit(input);
+    }
+
+    function calculateNewSalePriceUnit(input) {
+        const row = input.closest('tr');
+        const newSalePricePacket = parseFloat(row.querySelector('[name="new_sale_price_packet[]"]').value) || 0;
+        const packQuantity = parseFloat(row.querySelector('[name="pack_quantity[]"]').value) || 1;
+        const unitQuantity = parseFloat(row.querySelector('[name="unit_quantity[]"]').value) || 1;
+        const newSalePriceUnitInput = row.querySelector('[name="new_sale_price_unit[]"]');
+        const newSalePriceUnit = newSalePricePacket * packQuantity/ unitQuantity;
+        newSalePriceUnitInput.value = isNaN(newSalePriceUnit) ? '' : newSalePriceUnit.toFixed(2);
+    }
+</script>
+
 
