@@ -162,7 +162,7 @@
                 </div>
                 <div class="row justify-content-end">
                     <div class="form-group">
-                        <button type="submit" class="btn btn-success" style="min-width: 220px">Save</button>
+                        <button type="button" class="btn btn-success" style="min-width: 220px">Save</button>
                     </div>
                 </div>
             </form>

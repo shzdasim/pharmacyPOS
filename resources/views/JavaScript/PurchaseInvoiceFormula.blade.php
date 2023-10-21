@@ -85,10 +85,16 @@
         const selectedRow = $(this).closest('tr');
 
         // Populate other fields based on the selected data
+        // Populate last fields
         selectedRow.find('[name="pack_size[]"]').val(selectedData.pack_size);
         selectedRow.find('[name="last_purchase_price_pack[]"]').val(selectedData.last_purchase_price_pack);
         selectedRow.find('[name="last_purchase_price_unit[]"]').val(selectedData.last_purchase_price_unit);
         selectedRow.find('[name="last_sale_price_pack[]"]').val(selectedData.last_sale_price_pack);
+        selectedRow.find('[name="last_sale_price_unit[]"]').val(selectedData.last_sale_price_unit);
+        // Populate now fields
+        selectedRow.find('[name="pack_purchase_price[]"]').val(selectedData.last_purchase_price_pack);
+        selectedRow.find('[name="unit_purchase_price[]"]').val(selectedData.last_purchase_price_unit);
+        selectedRow.find('[name="new_sale_price_packet[]"]').val(selectedData.last_sale_price_pack);
         selectedRow.find('[name="last_sale_price_unit[]"]').val(selectedData.last_sale_price_unit);
         // Add code to populate other fields as needed
     });
@@ -126,6 +132,7 @@
         // ... (other logic for handling product change)
     }
 </script>
+
 
 {{--  Calculate Pack Quntity and Unit Quantity --}}
 <script>
@@ -191,15 +198,17 @@
 {{-- Calculate New Sale Price Packet and New Sale Price Unit --}}
 <script>
     function calculateNewSalePricePacket(input) {
-        const row = input.closest('tr');
-        const packPurchasePrice = parseFloat(row.querySelector('[name="pack_purchase_price[]"]').value) || 0;
-        const newSalePricePacketInput = row.querySelector('[name="new_sale_price_packet[]"]');
-        const newSalePricePacket = packPurchasePrice;
-        newSalePricePacketInput.value = isNaN(newSalePricePacket) ? '' : newSalePricePacket.toFixed(2);
-        
-        // After calculating new sale price packet, also trigger the calculation of new sale price unit
-        calculateNewSalePriceUnit(input);
-    }
+    const row = input.closest('tr');
+    const newSalePriceUnit = parseFloat(row.querySelector('[name="new_sale_price_unit[]"]').value) || 0;
+    const packQuantity = parseFloat(row.querySelector('[name="pack_quantity[]"]').value) || 1;
+    const unitQuantity = parseFloat(row.querySelector('[name="unit_quantity[]"]').value) || 1;
+    const newSalePricePacketInput = row.querySelector('[name="new_sale_price_packet[]"]');
+    
+    // Calculate new sale price packet
+    const newSalePricePacket = newSalePriceUnit * unitQuantity / packQuantity;
+    
+    newSalePricePacketInput.value = isNaN(newSalePricePacket) ? '' : newSalePricePacket.toFixed(2);
+}
 
     function calculateNewSalePriceUnit(input) {
         const row = input.closest('tr');
@@ -210,6 +219,5 @@
         const newSalePriceUnit = newSalePricePacket * packQuantity/ unitQuantity;
         newSalePriceUnitInput.value = isNaN(newSalePriceUnit) ? '' : newSalePriceUnit.toFixed(2);
     }
+    
 </script>
-
-
